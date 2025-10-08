@@ -4,13 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "llm-safecall"
-version = "0.1.0"
-description = "Safely call LLMs with validation, retries, and observability."
+version = "0.2.0"
+description = "A safety+observability layer for LLM calls: policy guardrails, secret scanning, sanitization, schema validation, retries, budgets, and logs."
 readme = "README.md"
 requires-python = ">=3.10"
 license = {text = "MIT"}
 authors = [{name="Your Name"}]
 dependencies = [
+  "pyyaml>=6.0",
   "pydantic>=2.7",
   "tenacity>=9.0",
   "typing-extensions>=4.10"
@@ -29,3 +30,12 @@ ignore = ["E501"]
 [tool.pytest.ini_options]
 addopts = "-q"
 pythonpath = ["src"]
+
+
+[project.urls]
+Homepage = "https://github.com/your-org/llm-safecall"
+Source = "https://github.com/your-org/llm-safecall"
+Tracker = "https://github.com/your-org/llm-safecall/issues"
+
+[project.scripts]
+llm-safecall = "llm_safecall.cli:main"
