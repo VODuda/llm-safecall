@@ -1,11 +1,14 @@
 from pydantic import BaseModel
-from llm_safecall import SafeCall, MockProvider
+
+from llm_safecall import MockProvider, SafeCall
+
 
 class FlightPlan(BaseModel):
     origin: str
     destination: str
     depart_date: str
     airline: str | None = None
+
 
 def test_happy_path_validation_and_report():
     safe = SafeCall(MockProvider(), output=FlightPlan, temperature=0.1)

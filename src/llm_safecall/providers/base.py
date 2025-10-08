@@ -1,13 +1,16 @@
+from collections.abc import Iterable
 from dataclasses import dataclass
-from typing import Protocol, Iterable, Optional
+from typing import Protocol
+
 
 @dataclass
 class ProviderResponse:
     text: str
-    input_tokens: Optional[int] = None
-    output_tokens: Optional[int] = None
-    model: Optional[str] = None
-    cost: Optional[float] = None
+    input_tokens: int | None = None
+    output_tokens: int | None = None
+    model: str | None = None
+    cost: float | None = None
+
 
 class Provider(Protocol):
     def complete(self, prompt: str, **params) -> ProviderResponse: ...
