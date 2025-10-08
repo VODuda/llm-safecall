@@ -1,3 +1,26 @@
+Metadata-Version: 2.4
+Name: llm-safecall
+Version: 0.1.0
+Summary: Safely call LLMs with validation, retries, and observability.
+Author: Your Name
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Requires-Dist: pydantic>=2.7
+Requires-Dist: tenacity>=9.0
+Requires-Dist: typing-extensions>=4.10
+Provides-Extra: openai
+Requires-Dist: openai>=1.50.0; extra == "openai"
+Provides-Extra: anthropic
+Requires-Dist: anthropic>=0.34; extra == "anthropic"
+Provides-Extra: dev
+Requires-Dist: pytest>=8.2; extra == "dev"
+Requires-Dist: pytest-cov>=5.0; extra == "dev"
+Requires-Dist: ruff>=0.6; extra == "dev"
+Requires-Dist: mypy>=1.11; extra == "dev"
+Dynamic: license-file
+
 # llm-safecall
 
 A tiny but opinionated wrapper to make LLM calls **safe, validated, and observable**.
