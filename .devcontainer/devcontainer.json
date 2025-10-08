@@ -1,0 +1,18 @@
+{
+  "name": "llm-safecall",
+  "build": {
+    "dockerfile": "Dockerfile"
+  },
+  "features": {},
+  "settings": {
+    "python.defaultInterpreterPath": "/usr/local/bin/python"
+  },
+  "postCreateCommand": "pip install -e '.[dev,openai,anthropic]' && pre-commit install",
+  "extensions": [
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "Gruntfuggly.todo-tree"
+  ],
+  "remoteUser": "vscode"
+}
