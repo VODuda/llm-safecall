@@ -5,6 +5,7 @@ import pickle
 from pathlib import Path
 from typing import Any
 
+
 class Cache:
     def __init__(self, path: str | os.PathLike | None = None):
         self.path = Path(path or ".llm_safecall_cache.pkl")

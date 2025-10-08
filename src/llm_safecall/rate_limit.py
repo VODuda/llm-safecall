@@ -1,5 +1,7 @@
 import time
+
 from .errors import RateLimitExceededError
+
 
 class TokenBucket:
     def __init__(self, rate_per_sec: float, capacity: float | None = None):

@@ -1,7 +1,9 @@
-from llm_safecall import SafeCall, MockProvider
+from llm_safecall import MockProvider, SafeCall
+
 
 def test_cache_roundtrip(tmp_path):
     from llm_safecall.cache import Cache
+
     cache = Cache(tmp_path / "cache.pkl")
     safe = SafeCall(MockProvider(), cache=cache)
     a = safe.generate("hello as JSON")

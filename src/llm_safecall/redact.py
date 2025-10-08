@@ -1,8 +1,9 @@
 import re
-from typing import Iterable
+from collections.abc import Iterable
 
 EMAIL_RE = re.compile(r"[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}")
 PHONE_RE = re.compile(r"(?:\+?\d[\s-]?){7,}")
+
 
 def redact_text(text: str, fields: Iterable[str]) -> str:
     out = text

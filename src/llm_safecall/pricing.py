@@ -4,6 +4,7 @@ PRICING = {
     "anthropic:claude-3-5-sonnet-20240620": {"input": 0.003, "output": 0.015},
 }
 
+
 def estimate_cost(vendor_model: str, in_tokens: int | None, out_tokens: int | None) -> float | None:
     if in_tokens is None and out_tokens is None:
         return None

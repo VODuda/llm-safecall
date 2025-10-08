@@ -1,6 +1,7 @@
-from dataclasses import dataclass, field
-from contextlib import contextmanager
 import time
+from contextlib import contextmanager
+from dataclasses import dataclass
+
 
 @dataclass
 class CallReport:
@@ -18,6 +19,7 @@ class CallReport:
             "model": self.model,
             "cost_estimate": self.cost_estimate,
         }
+
 
 @contextmanager
 def time_it():

@@ -1,23 +1,27 @@
 from __future__ import annotations
+
 from pydantic import BaseModel, ValidationError
 from tenacity import retry, stop_after_attempt, wait_exponential_jitter
-from typing import Iterable
-from .providers.base import Provider
-from .moderation import check_input, check_output
-from .redact import redact_text
-from .metrics import CallReport, time_it
+
+from .budget import Budget
 from .cache import Cache
 from .errors import CircuitOpenError, PolicyViolationError
-from .policy import PolicyEngine, PolicyConfig
-from .budget import Budget
-from .rate_limit import TokenBucket
 from .ids import new_call_id
 from .logger import log_json
+from .metrics import CallReport, time_it
+from .moderation import check_input
+from .policy import PolicyConfig, PolicyEngine
+from .providers.base import Provider
+from .rate_limit import TokenBucket
+from .redact import redact_text
+
 
 class LLMText(str):
     """str subclass that can carry attributes like `._report`."""
+
     def __new__(cls, value: str):
         return super().__new__(cls, value)
+
 
 def _attach_report(result, report):
     if isinstance(result, str) and not isinstance(result, LLMText):
@@ -25,10 +29,17 @@ def _attach_report(result, report):
     setattr(result, "_report", report)
     return result
 
+
 class _CompatCircuit:
-    def __init__(self, parent): self._p = parent
-    def record_success(self): self._p._record_success()
-    def record_failure(self): self._p._record_failure()
+    def __init__(self, parent):
+        self._p = parent
+
+    def record_success(self):
+        self._p._record_success()
+
+    def record_failure(self):
+        self._p._record_failure()
+
 
 class SafeCall:
     def __init__(
@@ -109,7 +120,7 @@ class SafeCall:
         # Policy checks on output
         try:
             text = self.policy.post_call(text, schema_expected=bool(self.output))
-        except PolicyViolationError as e:
+        except PolicyViolationError:
             # One repair attempt if schema expected: ask the model to sanitize/JSONify
             if self.output:
                 repair_prompt = (
@@ -155,6 +166,7 @@ class SafeCall:
         log_json("llm_call_end", call_id=call_id, latency_ms=report.latency_ms)
         return result
 
+
 def _generate_core(self, prompt: str):
     call_id = new_call_id()
     if self._circuit_open():
@@ -180,7 +192,7 @@ def _generate_core(self, prompt: str):
             raise
     try:
         text = self.policy.post_call(text, schema_expected=bool(self.output))
-    except PolicyViolationError as e:
+    except PolicyViolationError:
         if self.output:
             repair_prompt = (
                 "Sanitize and return ONLY valid JSON for the requested schema. "
@@ -194,6 +206,7 @@ def _generate_core(self, prompt: str):
     result = text
     if self.output:
         from pydantic import ValidationError
+
         try:
             result = self.output.model_validate_json(text)
         except ValidationError:
@@ -220,6 +233,7 @@ def _generate_core(self, prompt: str):
     log_json("llm_call_end", call_id=call_id, latency_ms=report.latency_ms)
     return result, report
 
+
 def generate(self, prompt: str):
     if not self.fail_safe:
         return self._generate_core(prompt)[0]
@@ -230,6 +244,7 @@ def generate(self, prompt: str):
         fallback = LLMText(self.fail_safe_return)
         report = CallReport(latency_ms=0, model=getattr(self.llm, "model", None))
         return _attach_report(fallback, report)
+
 
 def stream_generate(self, prompt: str):
     """Experimental: stream with on-the-fly sanitization. Yields text chunks.

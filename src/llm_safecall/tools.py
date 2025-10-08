@@ -1,16 +1,30 @@
 from __future__ import annotations
-from typing import Callable, Any, Dict, Type
+
+from collections.abc import Callable
+from typing import Any
+
 from pydantic import BaseModel, ValidationError
+
 from .policy import PolicyEngine
+
 
 class ToolRunner:
     """Run tools with input/output schemas and policy checks.
     Use this for agent tool-calls to ensure arguments and results pass org policy."""
+
     def __init__(self, policy: PolicyEngine):
         self.policy = policy
-        self._registry: Dict[str, tuple[Callable[..., Any], Type[BaseModel] | None, Type[BaseModel] | None]] = {}
+        self._registry: dict[
+            str, tuple[Callable[..., Any], type[BaseModel] | None, type[BaseModel] | None]
+        ] = {}
 
-    def register(self, name: str, fn: Callable[..., Any], args_schema: Type[BaseModel] | None = None, result_schema: Type[BaseModel] | None = None):
+    def register(
+        self,
+        name: str,
+        fn: Callable[..., Any],
+        args_schema: type[BaseModel] | None = None,
+        result_schema: type[BaseModel] | None = None,
+    ):
         self._registry[name] = (fn, args_schema, result_schema)
 
     def call(self, name: str, **kwargs) -> Any:

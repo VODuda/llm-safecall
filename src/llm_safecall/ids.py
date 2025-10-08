@@ -1,4 +1,5 @@
-import uuid, time
+import uuid
+
 
 def new_call_id() -> str:
-    return f"call_{int(time.time()*1000)}_{uuid.uuid4().hex[:8]}"
+    return f"call_{uuid.uuid4().hex}"

@@ -1,8 +1,14 @@
 from __future__ import annotations
-import argparse, sys, json
-from pydantic import BaseModel, create_model
+
+import argparse
+import json
+import sys
+
+from pydantic import create_model
+
 from .env import from_env
 from .policy_yaml import load_policy
+
 
 def main(argv=None):
     argv = argv or sys.argv[1:]
@@ -37,6 +43,7 @@ def main(argv=None):
         print(json.dumps(res.model_dump(), indent=2))
     else:
         print(str(res))
+
 
 if __name__ == "__main__":
     main()
